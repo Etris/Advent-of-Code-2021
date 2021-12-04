@@ -6,7 +6,8 @@ from main import (
     check_all_horizontals,
     check_all_verticals,
     get_sum_of_all_unmarked,
-    make_all_bingo_movements
+    make_all_bingo_movements,
+    let_squid_win_so_choose_last_bingo_table
 )
 
 SAMPLE_BINGO = [
@@ -150,3 +151,11 @@ def test_validate_main_loop():
         chosen_numbers,
         bingo_list
     ) == 4512
+
+
+def test_validate_last_winner():
+    chosen_numbers, bingo_list = load_data('test.txt')
+    assert let_squid_win_so_choose_last_bingo_table(
+        chosen_numbers,
+        bingo_list
+    ) == 1924

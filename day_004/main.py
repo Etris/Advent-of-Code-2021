@@ -103,6 +103,29 @@ def make_all_bingo_movements(
                 )
 
 
+def let_squid_win_so_choose_last_bingo_table(
+        list_of_all_moves: List,
+        list_of_cards: List
+) -> int:
+    all_winners = []
+    all_winners_movements = []
+    list_of_current_movements = []
+    list_of_current_cards = list_of_cards.copy()
+    for move in list_of_all_moves:
+        list_of_current_movements.append(move)
+        for current_card in list_of_current_cards:
+            if check_all_patterns(list_of_current_movements, current_card):
+                all_winners.append(current_card)
+                all_winners_movements = list_of_current_movements.copy()
+        list_of_current_cards = [
+            card for card in list_of_current_cards if card not in all_winners
+        ]
+    return all_winners_movements[-1] * get_sum_of_all_unmarked(
+        all_winners_movements,
+        all_winners[-1]
+    )
+
+
 if __name__ == '__main__':
     test_movements, test_cards = load_data("test.txt")
     submission_movements, submission_cards = load_data("submission.txt")
@@ -110,3 +133,7 @@ if __name__ == '__main__':
           f'{make_all_bingo_movements(test_movements, test_cards)}')
     print(f'Task_1: '
           f'{make_all_bingo_movements(submission_movements, submission_cards)}')
+    print(f'Test_2: '
+          f'{let_squid_win_so_choose_last_bingo_table(test_movements, test_cards)}')
+    print(f'Task_2: '
+          f'{let_squid_win_so_choose_last_bingo_table(submission_movements, submission_cards)}')
