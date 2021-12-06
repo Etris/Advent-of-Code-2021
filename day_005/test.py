@@ -6,7 +6,8 @@ from main import (
     draw_empty_schema,
     make_drawing_iteration,
     return_number_of_fields_equal_to_two_or_greater,
-    first_part_loop
+    first_part_loop,
+    second_part_loop
 )
 
 
@@ -43,10 +44,15 @@ def test_if_horizontal_or_vertical_line_can_be_created():
     assert can_be_created is True
     assert type_of_line == 'horizontal'
     can_be_created, type_of_line = check_if_horizontal_or_verical_allowed(
-        [[1, 2], [3, 4]]
+        [[1, 2], [3, 6]]
     )
     assert can_be_created is False
     assert type_of_line == ''
+    can_be_created, type_of_line = check_if_horizontal_or_verical_allowed(
+        [[1, 1], [3, 3]]
+    )
+    assert can_be_created is True
+    assert type_of_line == 'diagonal'
 
 
 def test_make_single_iteration():
@@ -79,3 +85,8 @@ def test_if_number_of_crosses_is_correctly_estimated():
 def test_verify_first_part_loop_result():
     loaded_data = load_data('test.txt')
     assert first_part_loop(loaded_data) == 5
+
+
+def test_verify_second_part_loop_result():
+    loaded_data = load_data('test.txt')
+    assert second_part_loop(loaded_data) == 12

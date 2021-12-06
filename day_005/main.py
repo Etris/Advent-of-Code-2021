@@ -37,6 +37,12 @@ def find_min_and_max_coordinates(loaded_data: List) -> Tuple[List, List]:
         raise ValueError('Input list is empty')
 
 
+def check_diagonal(current_vent_line: List) -> bool:
+    if abs(current_vent_line[0][0] - current_vent_line[1][0]) == \
+            abs(current_vent_line[0][1] - current_vent_line[1][1]):
+        return True
+
+
 def check_if_horizontal_or_verical_allowed(
         current_vent_line: List
 ) -> Tuple[bool, str]:
@@ -44,6 +50,8 @@ def check_if_horizontal_or_verical_allowed(
         return True, 'vertical'
     elif current_vent_line[0][1] == current_vent_line[1][1]:
         return True, 'horizontal'
+    elif check_diagonal(current_vent_line):
+        return True, 'diagonal'
     else:
         return False, ''
 
@@ -57,25 +65,73 @@ def draw_empty_schema(starting_point: List, finish_point: List) -> List[List]:
     return empty_schema
 
 
+def make_vertical_iteration(
+        current_vent_line: List,
+        current_schema: List
+) -> List:
+    for ix in range(
+            min(current_vent_line[0][1], current_vent_line[1][1]),
+            max(current_vent_line[0][1] + 1, current_vent_line[1][1] + 1)
+    ):
+        current_schema[current_vent_line[0][0]][ix] += 1
+    return current_schema
+
+
+def make_horizontal_iteration(
+        current_vent_line: List,
+        current_schema: List
+) -> List:
+    for ix in range(
+            min(current_vent_line[0][0], current_vent_line[1][0]),
+            max(current_vent_line[0][0], current_vent_line[1][0]) + 1
+    ):
+        current_schema[ix][current_vent_line[0][1]] += 1
+    return current_schema
+
+
+def make_diagontal_iteration(
+        current_vent_line: List,
+        current_schema: List
+) -> List:
+    distance = abs(
+        current_vent_line[0][0] - current_vent_line[1][0]
+    ) + 1
+    x, y = current_vent_line[0]
+    x_mod = -1 if current_vent_line[0][0] > current_vent_line[1][0] else 1
+    y_mod = -1 if current_vent_line[0][1] > current_vent_line[1][1] else 1
+    for cross in range(distance):
+        current_schema[x][y] += 1
+        x += x_mod
+        y += y_mod
+    return current_schema
+
+
 def make_drawing_iteration(
-    current_vent_line: List,
-    current_vent_type: str,
-    current_schema: List
+        current_vent_line: List,
+        current_vent_type: str,
+        current_schema: List
 ) -> List:
     working_schema = current_schema.copy()
-    if current_vent_type == 'horizontal':
-        for ix in range(
-          min(current_vent_line[0][0], current_vent_line[1][0]),
-          max(current_vent_line[0][0]+1, current_vent_line[1][0]+1)
-        ):
-            working_schema[ix][current_vent_line[0][1]] += 1
-        return working_schema
-    elif current_vent_type == 'vertical':
-        for ix in range(
-                min(current_vent_line[0][1], current_vent_line[1][1]),
-                max(current_vent_line[0][1]+1, current_vent_line[1][1] + 1)
-        ):
-            working_schema[current_vent_line[0][0]][ix] += 1
+    if current_vent_type in [
+        'horizontal',
+        'vertical',
+        'diagonal'
+    ]:
+        if current_vent_type == 'horizontal':
+            working_schema = make_horizontal_iteration(
+                current_vent_line,
+                working_schema
+            )
+        if current_vent_type == 'vertical':
+            working_schema = make_vertical_iteration(
+                current_vent_line,
+                working_schema
+            )
+        if current_vent_type == 'diagonal':
+            working_schema = make_diagontal_iteration(
+                current_vent_line,
+                working_schema
+            )
         return working_schema
     else:
         raise ValueError("Unknown type of vent")
@@ -99,6 +155,25 @@ def first_part_loop(list_of_all_vents: List) -> int:
     )
     for vent in list_of_all_vents:
         status, type_of = check_if_horizontal_or_verical_allowed(vent)
+        if status and type_of in ['horizontal', 'vertical']:
+            current_schema = make_drawing_iteration(
+                vent,
+                type_of,
+                current_schema
+            )
+    return return_number_of_fields_equal_to_two_or_greater(
+        current_schema
+    )
+
+
+def second_part_loop(list_of_all_vents: List) -> int:
+    min_point, max_point = find_min_and_max_coordinates(list_of_all_vents)
+    current_schema = draw_empty_schema(
+        min_point, max_point
+    )
+    for vent in list_of_all_vents:
+        status, type_of = check_if_horizontal_or_verical_allowed(vent)
+        #print(vent, type_of)
         if status:
             current_schema = make_drawing_iteration(
                 vent,
@@ -117,3 +192,7 @@ if __name__ == '__main__':
           f'{first_part_loop(test_vents)}')
     print(f'Task_1: '
           f'{first_part_loop(submission_vents)}')
+    print(f'Test_2: '
+          f'{second_part_loop(test_vents)}')
+    print(f'Task_2: '
+          f'{second_part_loop(submission_vents)}')
