@@ -1,9 +1,13 @@
 import pytest
+import numpy as np
 from main import (
     load_data,
     check_position_if_exists,
     evaluate_position,
-    find_low_points
+    find_low_points,
+    evaluate_basin,
+    find_all_basins,
+    find_top_size_basins
 )
 
 SAMPLE_DATA = load_data('test.txt')
@@ -65,3 +69,25 @@ def test_evaluate_position():
 
 def test_find_low_points():
     assert find_low_points(SAMPLE_DATA) == 15
+
+
+def test_find_basins():
+    array = np.array(SAMPLE_DATA)
+    blocked_positions_array = np.zeros(array.shape)
+    _, size = evaluate_basin(
+        array,
+        blocked_positions_array,
+        0,
+        1
+    )
+    assert size == 3
+
+
+def test_find_all_basins():
+    assert sorted(find_all_basins(SAMPLE_DATA)) == sorted(
+        [3, 9, 14, 9]
+    )
+
+
+def test_find_top_size_basins():
+    assert find_top_size_basins(SAMPLE_DATA) == 1134
