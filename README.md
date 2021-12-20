@@ -28,4 +28,18 @@ made the same score as in the previous year.
 | 008  | Yes  | Partially  |
 | 009  | Yes  | Yes  |
 | 010  | Yes  | No  |
+| 011  | Yes  | No  |
+| 012  | No  | No  |
+| 013  | No  | No  |
+| 014  | No  | No  |
+| 015  | No  | No  |
+| 016  | No  | No  |
+| 017  | No  | No  |
+| 018  | No  | No  |
+| 019  | No  | No  |
+| 020  | No  | No  |
+| 021  | No  | No  |
+| 022  | No  | No  |
+| 023  | No  | No  |
+| 024  | No  | No  |
 
