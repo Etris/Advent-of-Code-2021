@@ -10,7 +10,7 @@ previous ones were not so spectacular - take a look into this numbers:
 |  2019 |  9 |
 |  2020 |  18|
 
-Currently, number of stars for this year is... __18__! So I've just
+Currently, number of stars for this year is... __22__! So I've just
 made the same score as in the previous year. 
 
 
