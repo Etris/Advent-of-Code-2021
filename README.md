@@ -27,4 +27,5 @@ made the same score as in the previous year.
 | 007  | Yes  | Yes  |
 | 008  | Yes  | Partially  |
 | 009  | Yes  | Yes  |
+| 010  | Yes  | No  |
 
